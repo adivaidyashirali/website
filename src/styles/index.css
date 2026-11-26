@@ -1,0 +1,233 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/*
+ * Devanagari accent font, subset to the few words used on the site (~21 KB
+ * instead of ~184 KB). If you add new Devanagari text, regenerate the subset
+ * (see README → "Fonts"); until then, missing glyphs fall back to a system font.
+ */
+@font-face {
+  font-family: "Tiro Devanagari Sanskrit";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/tiro-devanagari-subset.woff2") format("woff2");
+  unicode-range: U+0900-097F, U+200C-200D, U+25CC;
+}
+
+@theme {
+  /* Green — primary. 600 is the brand green; 950 the deepest section colour. */
+  --color-forest-950: #0a2414;
+  --color-forest-900: #0d3019;
+  --color-forest-800: #0f5c2c;
+  --color-forest-700: #126b33;
+  --color-forest-600: #15803d;
+  --color-forest-400: #4f9e6a;
+  --color-forest-300: #8cc29d;
+  --color-forest-200: #cfe5d5;
+  --color-forest-100: #e3f1e7;
+
+  /* Light surfaces */
+  --color-ivory-50: #ffffff;
+  --color-ivory-100: #f6f7f4;
+  --color-ivory-200: #eef3ea;
+  --color-ivory-300: #e3e8e1;
+
+  /* Saffron yellow — accent. Use 700 for small text on light surfaces. */
+  --color-gold-100: #fdf3d8;
+  --color-gold-200: #fbe3a3;
+  --color-gold-300: #f6c95a;
+  --color-gold-400: #f0b429;
+  --color-gold-500: #e0a312;
+  --color-gold-600: #b9840a;
+  --color-gold-700: #8a6208;
+  --color-copper-500: #b4441f;
+
+  /* Text */
+  --color-ink-900: #15241c;
+  --color-ink-700: #34463c;
+  --color-ink-500: #51635a;
+
+  --font-display: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-deva: "Tiro Devanagari Sanskrit", "Noto Serif Devanagari", serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-marquee: marquee 38s linear infinite;
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  --animate-scroll-cue: scroll-cue 2.4s var(--ease-out-soft) infinite;
+  @keyframes scroll-cue {
+    0% {
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+    45% {
+      transform: scaleY(1);
+      transform-origin: top;
+    }
+    55% {
+      transform: scaleY(1);
+      transform-origin: bottom;
+    }
+    100% {
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    background-color: var(--color-ivory-50);
+  }
+
+  body {
+    background-color: var(--color-ivory-50);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.7;
+    font-size: 1.0625rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+    /* Scroll reveals: show the final state immediately */
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+      clip-path: none !important;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-optical-sizing: auto;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-gold-300);
+    color: var(--color-forest-950);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold-400);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+
+}
+
+@utility container-site {
+  width: 100%;
+  max-width: 92rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (min-width: 640px) {
+    padding-inline: 2rem;
+  }
+  @media (min-width: 1024px) {
+    padding-inline: 3.5rem;
+  }
+}
+
+/* Emphasis on dark surfaces: saffron yellow */
+@utility text-gold-gradient {
+  background-image: linear-gradient(100deg, var(--color-gold-300), var(--color-gold-400) 55%, var(--color-gold-500));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Emphasis on light surfaces: brand green */
+@utility text-gold-deep {
+  background-image: linear-gradient(100deg, var(--color-forest-600), var(--color-forest-700));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Dot grid used as a decorative backdrop */
+@utility dots {
+  background-image: radial-gradient(var(--color-ivory-300) 1.6px, transparent 1.6px);
+  background-size: 18px 18px;
+}
+
+@utility hairline-gold {
+  background-image: linear-gradient(90deg, transparent, var(--color-gold-400), transparent);
+}
+
+@layer components {
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* Film grain over the whole page — a single fixed layer, no requests */
+  .grain-overlay {
+    pointer-events: none;
+    position: fixed;
+    inset: -50%;
+    z-index: 90;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.6s var(--ease-expo);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  /* Soft radial glow used behind dark sections */
+  .glow-gold {
+    background-image: radial-gradient(55% 50% at 75% 20%, rgb(240 180 41 / 0.14), transparent 70%);
+  }
+  .glow-forest {
+    background-image: radial-gradient(70% 60% at 15% 0%, rgb(21 128 61 / 0.35), transparent 70%),
+      radial-gradient(50% 50% at 90% 10%, rgb(240 180 41 / 0.08), transparent 70%);
+  }
+}
